@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blockchain más allá de las Criptomonedas</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #ffffff;
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Minecraft-style pixelated background pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(45deg, rgba(255,255,255,0.02) 25%, transparent 25%),
+                linear-gradient(-45deg, rgba(255,255,255,0.02) 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, rgba(255,255,255,0.02) 75%),
+                linear-gradient(-45deg, transparent 75%, rgba(255,255,255,0.02) 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+            z-index: -1;
+        }
+
+        /* Header Navigation */
+        .nav-header {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px 0;
+            backdrop-filter: blur(10px);
+            border-bottom: 3px solid #00ff88;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .main-logo {
+            font-size: 1.8em;
+            font-weight: 900;
+            color: #00ff88;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .iub-logo {
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            color: #1a1a2e;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 1.2em;
+            box-shadow: 0 4px 8px rgba(0, 255, 136, 0.3);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .iub-logo:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 255, 136, 0.4);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 60px 0;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 255, 136, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 3.5em;
+            font-weight: 900;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #00ff88, #ffffff, #00cc6a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero .subtitle {
+            font-size: 1.3em;
+            color: #cccccc;
+            margin-bottom: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Minecraft-style buttons */
+        .mc-button {
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            color: #1a1a2e;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1.1em;
+            font-weight: 700;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 0 #009955, 0 8px 16px rgba(0, 0, 0, 0.3);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .mc-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 #009955, 0 10px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .mc-button:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #009955, 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Section styling */
+        .section {
+            background: rgba(0, 0, 0, 0.4);
+            margin-bottom: 30px;
+            border-radius: 8px;
+            border-left: 4px solid #00ff88;
+            backdrop-filter: blur(5px);
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        h2 {
+            color: #00ff88;
+            font-size: 2.5em;
+            font-weight: 900;
+            margin-bottom: 25px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, #00ff88, transparent);
+        }
+
+        h3 {
+            color: #ffffff;
+            font-size: 1.8em;
+            font-weight: 700;
+            margin: 25px 0 15px 0;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        p {
+            color: #e0e0e0;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            line-height: 1.8;
+            text-align: justify;
+        }
+
+        /* Lists */
+        ul, ol {
+            margin: 20px 0;
+            padding-left: 30px;
+        }
+
+        li {
+            color: #e0e0e0;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        li strong {
+            color: #00ff88;
+        }
+
+        /* Minecraft-style highlight boxes */
+        .highlight {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 204, 106, 0.2));
+            border: 2px solid #00ff88;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 25px 0;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.1);
+        }
+
+        .highlight::before {
+            content: '💡';
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: #1a1a2e;
+            padding: 5px 10px;
+            font-size: 1.2em;
+        }
+
+        /* Grid layout for cards */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .card {
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid #333333;
+            border-radius: 8px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #00ff88, #00cc6a);
+        }
+
+        .card:hover {
+            border-color: #00ff88;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.2);
+        }
+
+        .card .icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            display: block;
+            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));
+        }
+
+        .card h3 {
+            color: #00ff88;
+            margin-bottom: 15px;
+        }
+
+        .card p {
+            color: #cccccc;
+        }
+
+        /* Minecraft-style table */
+        .table-container {
+            overflow-x: auto;
+            margin: 30px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid #333333;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        th {
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            color: #1a1a2e;
+            padding: 15px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9em;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #333333;
+            color: #e0e0e0;
+        }
+
+        tr:nth-child(even) {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        tr:hover {
+            background: rgba(0, 255, 136, 0.1);
+        }
+
+        td strong {
+            color: #00ff88;
+            font-weight: 700;
+        }
+
+        /* Links */
+        .link-placeholder {
+            color: #00ff88;
+            text-decoration: underline;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .link-placeholder:hover {
+            color: #ffffff;
+            text-shadow: 0 0 5px #00ff88;
+        }
+
+        /* Credits Section */
+        .credits {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ff88;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            margin-top: 50px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .credits::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #00ff88, #00cc6a, #00ff88);
+            animation: shimmer 2s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .credits h2 {
+            color: #00ff88;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        .credits p {
+            font-size: 1.2em;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+
+        .credits .author {
+            color: #00ff88;
+            font-weight: 700;
+            font-size: 1.3em;
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+        }
+
+        .credits .program {
+            color: #cccccc;
+            font-style: italic;
+            margin-top: 10px;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .hero h1 {
+                font-size: 2.5em;
+            }
+            
+            h2 {
+                font-size: 2em;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+            
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .table-container {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <nav class="nav-header">
+        <div class="nav-container">
+            <div class="logo-section">
+                <div class="main-logo">BlockchainTech</div>
+            </div>
+            <a href="https://www.iub.edu.co" target="_blank" class="iub-logo">IUB</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="hero animate">
+            <div class="hero-content">
+                <h1>Blockchain más allá de las Criptomonedas</h1>
+                <p class="subtitle">Explorando el verdadero potencial de la tecnología que está revolucionando el mundo digital</p>
+                <a href="#introduccion" class="mc-button">Comenzar Exploración</a>
+            </div>
+        </section>
+
+        <!-- Introduction Section -->
+        <section id="introduccion" class="section animate">
+            <h2>🚀 Introducción: La Revolución Silenciosa del Blockchain</h2>
+            <p>
+                Cuando la mayoría de las personas escuchan la palabra "blockchain", inmediatamente piensan en Bitcoin, Ethereum y otras criptomonedas. Sin embargo, esta asociación limitada apenas rasca la superficie de una tecnología que promete revolucionar prácticamente todos los sectores de nuestra economía digital. El blockchain, en su esencia, es mucho más que un simple libro de contabilidad para monedas digitales; es una infraestructura tecnológica que puede transformar la manera en que almacenamos, verificamos y transferimos cualquier tipo de información de valor.
+            </p>
+            
+            <p>
+                Esta tecnología de registro distribuido ofrece características únicas que la hacen invaluable para una amplia gama de aplicaciones: inmutabilidad, transparencia, descentralización y seguridad criptográfica. Estas propiedades no solo son beneficiosas para las transacciones financieras, sino que también pueden resolver problemas fundamentales en industrias tan diversas como la <span class="link-placeholder">cadena de suministro</span>, la <span class="link-placeholder">atención médica</span>, la <span class="link-placeholder">gestión de identidad digital</span>, y los <span class="link-placeholder">contratos inteligentes</span>.
+            </p>
+
+            <p>
+                En los próximos años, es probable que veamos cómo el blockchain se integra silenciosamente en nuestras vidas cotidianas, mejorando la eficiencia, reduciendo los costos y aumentando la confianza en sistemas que tradicionalmente han requerido intermediarios. Desde la verificación de la autenticidad de productos hasta la gestión de registros médicos, desde la votación digital hasta la protección de la propiedad intelectual, el blockchain está preparado para convertirse en la columna vertebral invisible pero crucial de la economía digital del futuro.
+            </p>
+        </section>
+
+        <!-- Technical Fundamentals -->
+        <section class="section animate">
+            <h2>🔧 ¿Qué es Blockchain? Fundamentos Técnicos</h2>
+            
+            <div class="highlight">
+                <strong>Definición Técnica:</strong> Blockchain es una base de datos distribuida que mantiene una lista de registros, llamados bloques, que están enlazados y asegurados usando criptografía. Cada bloque contiene un hash criptográfico del bloque anterior, una marca de tiempo y datos de transacción.
+            </div>
+
+            <p>
+                Para entender completamente el potencial del blockchain más allá de las criptomonedas, es fundamental comprender sus componentes técnicos básicos. Un blockchain consiste en una cadena de bloques digitales, donde cada bloque contiene un conjunto de transacciones o datos que han sido validados por la red. Lo que hace especial a esta estructura es que una vez que la información se registra en un bloque y se añade a la cadena, se vuelve prácticamente imposible de alterar sin el consenso de la mayoría de la red.
+            </p>
+
+            <h3>⚙️ Características Fundamentales</h3>
+            <ul>
+                <li><strong>Inmutabilidad:</strong> Los datos registrados no pueden ser alterados retroactivamente sin cambiar todos los bloques subsecuentes, lo que requeriría un poder computacional masivo y el consenso de la red.</li>
+                <li><strong>Descentralización:</strong> No existe una autoridad central que controle la red; en su lugar, todos los participantes mantienen una copia del registro completo.</li>
+                <li><strong>Transparencia:</strong> Todas las transacciones son visibles para todos los participantes de la red, aunque la identidad de los usuarios puede permanecer pseudónima.</li>
+                <li><strong>Consenso distribuido:</strong> Las nuevas transacciones deben ser validadas por múltiples nodos de la red antes de ser añadidas al blockchain.</li>
+            </ul>
+
+            <p>
+                Estas características técnicas crean un sistema de confianza sin necesidad de intermediarios tradicionales. En lugar de confiar en bancos, gobiernos o corporaciones para verificar y procesar transacciones, los participantes pueden confiar en las matemáticas y la criptografía que aseguran la integridad del sistema. Esta capacidad de crear confianza en un entorno descentralizado es lo que hace que el blockchain sea aplicable a tantos casos de uso diferentes más allá de las criptomonedas.
+            </p>
+        </section>
+
+        <!-- Revolutionary Applications -->
+        <section class="section animate">
+            <h2>🌟 Aplicaciones Revolucionarias del Blockchain</h2>
+
+            <div class="grid">
+                <div class="card">
+                    <span class="icon">📦</span>
+                    <h3>Cadena de Suministro</h3>
+                    <p>Trazabilidad completa desde el origen hasta el consumidor final, combatiendo la falsificación y garantizando la autenticidad de productos.</p>
+                </div>
+
+                <div class="card">
+                    <span class="icon">🏥</span>
+                    <h3>Atención Médica</h3>
+                    <p>Gestión segura de historiales médicos, investigación farmacéutica y verificación de medicamentos auténticos.</p>
+                </div>
+
+                <div class="card">
+                    <span class="icon">🆔</span>
+                    <h3>Identidad Digital</h3>
+                    <p>Control personal sobre datos de identidad, eliminando la necesidad de múltiples documentos físicos y reduciendo el fraude.</p>
+                </div>
+
+                <div class="card">
+                    <span class="icon">📜</span>
+                    <h3>Contratos Inteligentes</h3>
+                    <p>Automatización de acuerdos y ejecución de contratos sin intermediarios, reduciendo costos y tiempos de procesamiento.</p>
+                </div>
+
+                <div class="card">
+                    <span class="icon">🗳️</span>
+                    <h3>Votación Digital</h3>
+                    <p>Sistemas de votación transparentes, auditables y seguros que pueden revolucionar los procesos democráticos.</p>
+                </div>
+
+                <div class="card">
+                    <span class="icon">🏠</span>
+                    <h3>Bienes Raíces</h3>
+                    <p>Registro de propiedades, transferencias automatizadas y reducción de fraudes en transacciones inmobiliarias.</p>
+                </div>
+            </div>
+
+            <h3>🔗 Cadena de Suministro: Transparencia Total</h3>
+            <p>
+                Una de las aplicaciones más prometedoras del blockchain fuera del ámbito financiero es la gestión de cadenas de suministro. En un mundo donde los consumidores están cada vez más preocupados por el origen y la autenticidad de los productos que compran, el blockchain ofrece una solución elegante y verificable. Empresas como <span class="link-placeholder">Walmart</span> ya están utilizando blockchain para rastrear productos alimenticios desde la granja hasta la mesa, permitiendo identificar el origen de contaminaciones alimentarias en segundos en lugar de días o semanas.
+            </p>
+
+            <p>
+                El sistema funciona asignando un identificador único a cada producto en el punto de origen, que luego se actualiza en cada etapa del proceso de la cadena de suministro. Cada actualización se registra como una transacción en el blockchain, creando un historial inmutable y transparente del viaje del producto. Esto no solo combate la falsificación, sino que también permite a las empresas optimizar sus operaciones, reducir desperdicios y responder más rápidamente a problemas de calidad o seguridad.
+            </p>
+
+            <h3>⚕️ Atención Médica: Revolucionando la Gestión de Datos</h3>
+            <p>
+                En el sector de la atención médica, el blockchain promete resolver algunos de los desafíos más persistentes relacionados con la privacidad, seguridad e interoperabilidad de los datos médicos. Los historiales médicos almacenados en blockchain pueden ser accesibles de forma segura por múltiples proveedores de atención médica, mientras que el paciente mantiene el control total sobre quién puede acceder a su información y bajo qué circunstancias.
+            </p>
+
+            <p>
+                Además, la industria farmacéutica está explorando el uso de blockchain para combatir los medicamentos falsificados, un problema que afecta a millones de personas en todo el mundo. Al registrar cada paso del proceso de fabricación y distribución de medicamentos en un blockchain, se puede verificar la autenticidad de cada píldora o vial, desde el laboratorio hasta la farmacia. Proyectos como <span class="link-placeholder">MedRec</span> del MIT están desarrollando sistemas que permiten a los pacientes controlar completamente sus datos médicos mientras facilitan la investigación médica mediante el acceso controlado a datos anonimizados.
+            </p>
+        </section>
+
+        <!-- Smart Contracts -->
+        <section class="section animate">
+            <h2>🤖 Contratos Inteligentes: Automatizando el Futuro</h2>
+            
+            <p>
+                Los contratos inteligentes representan quizás la innovación más revolucionaria que emerge de la tecnología blockchain. Estos programas autoejecutables contienen los términos del acuerdo directamente escritos en código y se ejecutan automáticamente cuando se cumplen las condiciones predefinidas. A diferencia de los contratos tradicionales, que requieren intermediarios humanos para su interpretación y ejecución, los contratos inteligentes eliminan la necesidad de terceros confiables y reducen significativamente los costos de transacción.
+            </p>
+
+            <div class="highlight">
+                <strong>Ejemplo Práctico:</strong> Un contrato de seguros inteligente puede automáticamente procesar y pagar reclamaciones por retrasos de vuelos consultando bases de datos de aerolíneas en tiempo real, sin necesidad de que el cliente presente una reclamación manual.
+            </div>
+
+            <p>
+                La versatilidad de los contratos inteligentes es extraordinaria. En el sector inmobiliario, pueden automatizar completamente el proceso de compraventa de propiedades, liberando fondos del depósito en garantía solo cuando se cumplen todas las condiciones acordadas, como la inspección satisfactoria de la propiedad y la aprobación del financiamiento. En el ámbito empresarial, pueden gestionar cadenas de suministro complejas, liberando pagos automáticamente cuando los productos se entregan y verifican en cada etapa del proceso.
+            </p>
+
+            <h3>🏢 Sectores que se Benefician de los Contratos Inteligentes</h3>
+            <ol>
+                <li><strong>Servicios Financieros:</strong> Préstamos automatizados, seguros paramétricos y productos derivados complejos</li>
+                <li><strong>Entretenimiento:</strong> Distribución automática de regalías a artistas y creadores de contenido</li>
+                <li><strong>Recursos Humanos:</strong> Nóminas automáticas basadas en métricas de rendimiento verificables</li>
+                <li><strong>Internet de las Cosas (IoT):</strong> Pagos automáticos entre dispositivos conectados</li>
+                <li><strong>Energía:</strong> Trading automático de energía renovable entre prosumidores</li>
+            </ol>
+        </section>
+
+        <!-- Platform Comparison -->
+        <section class="section animate">
+            <h2>⚖️ Comparación de Plataformas Blockchain</h2>
+            
+            <p>
+                No todos los blockchains son creados iguales. Diferentes plataformas han sido diseñadas con distintos propósitos y características en mente. Comprender estas diferencias es crucial para seleccionar la plataforma adecuada para cada aplicación específica. La siguiente tabla compara las principales plataformas blockchain utilizadas para aplicaciones más allá de las criptomonedas:
+            </p>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Plataforma</th>
+                            <th>Consenso</th>
+                            <th>Velocidad (TPS)</th>
+                            <th>Casos de Uso Principales</th>
+                            <th>Ventajas</th>
+                            <th>Limitaciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Ethereum</strong></td>
+                            <td>Proof of Stake</td>
+                            <td>15-20</td>
+                            <td>Contratos inteligentes, DeFi, NFTs</td>
+                            <td>Ecosistema maduro, gran adopción</td>
+                            <td>Altas tarifas de gas, escalabilidad limitada</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Hyperledger Fabric</strong></td>
+                            <td>Pluggable</td>
+                            <td>3,500+</td>
+                            <td>Aplicaciones empresariales, cadena de suministro</td>
+                            <td>Permisionado, alta escalabilidad</td>
+                            <td>No es público, curva de aprendizaje empinada</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Polygon</strong></td>
+                            <td>Proof of Stake</td>
+                            <td>7,000+</td>
+                            <td>Escalamiento de Ethereum, gaming, DeFi</td>
+                            <td>Bajas tarifas, compatible con Ethereum</td>
+                            <td>Dependiente de Ethereum, centralización relativa</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Solana</strong></td>
+                            <td>Proof of History + PoS</td>
+                            <td>50,000+</td>
+                            <td>DeFi, NFTs, aplicaciones web3</td>
+                            <td>Ultra rápido, bajas tarifas</td>
+                            <td>Relativamente nuevo, problemas de estabilidad</td>
+                        </tr>
+                        <tr>
+                            <td><strong>VeChain</strong></td>
+                            <td>Proof of Authority</td>
+                            <td>10,000+</td>
+                            <td>Cadena de suministro, trazabilidad</td>
+                            <td>Enfocado en casos de uso empresariales</td>
+                            <td>Menos descentralizado, ecosistema limitado</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Case Studies -->
+        <section class="section animate">
+            <h2>📊 Casos de Estudio: Éxitos Reales del Blockchain</h2>
+            
+            <h3>🛒 Walmart: Revolucionando la Seguridad Alimentaria</h3>
+            <p>
+                Walmart, una de las cadenas de supermercados más grandes del mundo, ha implementado un sistema blockchain desarrollado en colaboración con <span class="link-placeholder">IBM Food Trust</span> para rastrear productos alimenticios a lo largo de toda su cadena de suministro. El sistema ha demostrado resultados impresionantes: lo que antes tomaba semanas para rastrear el origen de un producto contaminado, ahora toma solo 2.2 segundos.
+            </p>
+
+            <p>
+                Durante una prueba piloto con mangos, Walmart pudo rastrear un paquete específico desde una granja en México hasta una tienda específica en Estados Unidos en segundos. Esta capacidad no solo mejora la seguridad alimentaria, sino que también reduce significativamente el desperdicio de alimentos, ya que permite identificar rápidamente lotes específicos afectados en lugar de retirar categorías enteras de productos del mercado.
+            </p>
+
+            <h3>🇪🇪 Estonia: Identidad Digital Nacional</h3>
+            <p>
+                Estonia ha implementado uno de los sistemas de identidad digital más avanzados del mundo, utilizando tecnología blockchain para asegurar los datos de identidad de sus ciudadanos. El sistema <span class="link-placeholder">e-Residency</span> permite a cualquier persona en el mundo obtener una identidad digital estonia y acceder a servicios gubernamentales digitalmente.
+            </p>
+
+            <p>
+                Más del 99% de los servicios públicos estonianos están disponibles en línea las 24 horas del día, desde la presentación de declaraciones de impuestos hasta la votación en elecciones. El blockchain garantiza que los datos de identidad digital sean inmutables y verificables, mientras que los ciudadanos mantienen control total sobre qué información comparten y con quién. Este sistema ha servido como modelo para otros países que buscan digitalizar sus servicios gubernamentales.
+            </p>
+
+            <h3>🚢 Maersk: Transformando el Comercio Internacional</h3>
+            <p>
+                Maersk, la compañía naviera más grande del mundo, colaboró con IBM para desarrollar <span class="link-placeholder">TradeLens</span>, una plataforma blockchain diseñada para digitalizar y simplificar las cadenas de suministro globales. La plataforma conecta a cargadores, puertos, autoridades aduaneras, proveedores de logística y otros participantes en el ecosistema comercial global.
+            </p>
+
+            <p>
+                TradeLens ha demostrado reducir los tiempos de tránsito hasta en un 40% al eliminar la necesidad de documentación en papel y automatizar muchos procesos que tradicionalmente requerían intervención manual. La plataforma maneja más de 30 millones de eventos de envío y casi 1.000 millones de eventos comerciales, demostrando la viabilidad del blockchain para aplicaciones de escala masiva.
+            </p>
+        </section>
+
+        <!-- Challenges and Limitations -->
+        <section class="section animate">
+            <h2>⚠️ Desafíos y Limitaciones Actuales</h2>
+            
+            <p>
+                A pesar de su enorme potencial, la tecnología blockchain enfrenta varios desafíos significativos que deben ser abordados antes de lograr una adopción masiva en aplicaciones no financieras. Comprender estas limitaciones es crucial para tener expectativas realistas sobre el cronograma y el alcance de la implementación del blockchain en diferentes sectores.
+            </p>
+
+            <h3>⚡ Escalabilidad: El Trilema del Blockchain</h3>
+            <p>
+                Uno de los desafíos más persistentes es el llamado "trilema del blockchain": la dificultad de lograr simultáneamente descentralización, seguridad y escalabilidad. La mayoría de las blockchains públicas pueden procesar solo un número limitado de transacciones por segundo comparado con sistemas centralizados tradicionales. Por ejemplo, mientras que Visa puede procesar hasta 65,000 transacciones por segundo, Bitcoin procesa aproximadamente 7 y Ethereum alrededor de 15.
+            </p>
+
+            <p>
+                Este cuello de botella en el rendimiento limita la aplicabilidad del blockchain para aplicaciones que requieren un alto volumen de transacciones. Sin embargo, soluciones innovadoras como <span class="link-placeholder">sharding</span>, <span class="link-placeholder">sidechains</span>, y <span class="link-placeholder">layer 2 solutions</span> están emergiendo para abordar estos problemas de escalabilidad sin comprometer la seguridad o la descentralización.
+            </p>
+
+            <h3>🌱 Consumo Energético y Sostenibilidad</h3>
+            <p>
+                El algoritmo de consenso Proof of Work, utilizado por Bitcoin y anteriormente por Ethereum, requiere cantidades masivas de energía para mantener la seguridad de la red. Esto ha generado preocupaciones legítimas sobre el impacto ambiental de la tecnología blockchain. Afortunadamente, algoritmos de consenso más eficientes energéticamente, como Proof of Stake, están siendo adoptados por nuevas plataformas y redes existentes.
+            </p>
+
+            <h3>📋 Marco Regulatorio y Cumplimiento</h3>
+            <p>
+                La naturaleza descentralizada y a menudo pseudónima del blockchain presenta desafíos únicos para los reguladores. Las empresas que implementan soluciones blockchain deben navegar por un panorama regulatorio complejo y en constante evolución, especialmente en sectores altamente regulados como la atención médica y los servicios financieros.
+            </p>
+
+            <ul>
+                <li><strong>GDPR y Derecho al Olvido:</strong> La inmutabilidad del blockchain puede entrar en conflicto con regulaciones de privacidad que requieren la capacidad de eliminar datos personales</li>
+                <li><strong>Cumplimiento AML/KYC:</strong> Los requisitos anti-lavado de dinero y conocimiento del cliente pueden ser difíciles de implementar en sistemas descentralizados</li>
+                <li><strong>Jurisdicción Legal:</strong> La naturaleza global del blockchain complica la determinación de qué leyes se aplican en caso de disputas</li>
+            </ul>
+        </section>
+
+        <!-- Future of Blockchain -->
+        <section class="section animate">
+            <h2>🔮 El Futuro del Blockchain: Tendencias y Predicciones</h2>
+            
+            <p>
+                A medida que la tecnología blockchain madura, estamos comenzando a ver convergencias interesantes con otras tecnologías emergentes que prometen amplificar aún más su impacto. La integración del blockchain con inteligencia artificial, Internet de las Cosas (IoT), y computación cuántica está creando nuevas posibilidades que apenas estamos comenzando a explorar.
+            </p>
+
+            <h3>🤖 Blockchain e Inteligencia Artificial</h3>
+            <p>
+                La combinación de blockchain e IA está creando oportunidades revolucionarias en áreas como la <span class="link-placeholder">verificación de modelos de IA</span>, el <span class="link-placeholder">comercio de datos</span>, y la <span class="link-placeholder">IA descentralizada</span>. Los blockchains pueden proporcionar trazabilidad y transparencia a los algoritmos de IA, permitiendo auditabilidad en sistemas de toma de decisiones críticas como préstamos bancarios o diagnósticos médicos.
+            </p>
+
+            <p>
+                Además, el blockchain puede facilitar mercados descentralizados para datos de entrenamiento de IA, permitiendo a los individuos monetizar sus datos personales de manera segura mientras mantienen control sobre su privacidad. Proyectos como <span class="link-placeholder">SingularityNET</span> están explorando redes de IA descentralizadas donde diferentes algoritmos pueden colaborar y competir en un marketplace blockchain.
+            </p>
+
+            <h3>🌐 Internet de las Cosas (IoT) y Blockchain</h3>
+            <p>
+                Con miles de millones de dispositivos IoT esperados en los próximos años, el blockchain ofrece una infraestructura ideal para gestionar identidades de dispositivos, facilitar micropagos entre dispositivos, y asegurar comunicaciones máquina-a-máquina. Imagine vehículos autónomos que negocian automáticamente el uso de espacios de estacionamiento, o electrodomésticos inteligentes que compran energía directamente de paneles solares vecinos.
+            </p>
+
+            <div class="highlight">
+                <strong>Predicción 2030:</strong> Se espera que más del 75% de las aplicaciones empresariales incorporen algún elemento de tecnología blockchain, desde la gestión de identidades hasta la automatización de procesos de negocio.
+            </div>
+
+            <h3>🔬 Investigación y Desarrollo Futuro</h3>
+            <p>
+                Las universidades y centros de investigación están explorando aplicaciones cada vez más sofisticadas del blockchain. Desde sistemas de votación cuántica-resistentes hasta mercados de carbono automatizados, el futuro promete innovaciones que apenas podemos imaginar hoy. La integración con tecnologías emergentes como la realidad aumentada y la computación en el borde creará nuevos paradigmas para la interacción digital.
+            </p>
+
+            <ul>
+                <li><strong>Blockchain Cuántico:</strong> Desarrollo de algoritmos resistentes a la computación cuántica</li>
+                <li><strong>Gobernanza Descentralizada:</strong> Organizaciones Autónomas Descentralizadas (DAOs) más sofisticadas</li>
+                <li><strong>Interoperabilidad:</strong> Puentes seamless entre diferentes redes blockchain</li>
+                <li><strong>Blockchain Verde:</strong> Algoritmos de consenso carbono-neutrales</li>
+            </ul>
+        </section>
+
+        <!-- Conclusion -->
+        <section class="section animate">
+            <h2>🎯 Conclusión: Un Futuro Descentralizado</h2>
+            
+            <p>
+                El blockchain representa mucho más que una tecnología para criptomonedas; es una infraestructura fundamental que promete remodelar la forma en que interactuamos, comerciamos y confiamos en el mundo digital. Desde la transparencia en las cadenas de suministro hasta la automatización de contratos complejos, desde la gestión segura de identidades digitales hasta la creación de nuevos modelos de negocio descentralizados, las aplicaciones del blockchain están limitadas solo por nuestra imaginación y capacidad de innovación.
+            </p>
+
+            <p>
+                Mientras navegamos por los desafíos actuales de escalabilidad, sostenibilidad y regulación, es importante recordar que estamos en las primeras etapas de lo que promete ser una revolución tecnológica tan significativa como la llegada de Internet. Las organizaciones que comprendan y adopten estas tecnologías de manera estratégica estarán mejor posicionadas para prosperar en la economía digital del futuro.
+            </p>
+
+            <p>
+                El futuro del blockchain no se trata solo de tecnología; se trata de crear un mundo más transparente, eficiente y equitativo donde la confianza se construye a través de código y consenso en lugar de depender únicamente de instituciones centralizadas. A medida que continuamos explorando y desarrollando estas tecnologías, estamos construyendo los cimientos de una nueva era digital que beneficiará a generaciones futuras.
+            </p>
+        </section>
+
+        <!-- Credits Section -->
+        <section class="credits">
+            <h2>👨‍💻 Créditos de Autoría</h2>
+            <p>Página web desarrollada por:</p>
+            <p class="author">Brandon José Carranza Rangel</p>
+            <p class="program">Programa de Ingeniería Telemática</p>
+            <p style="margin-top: 20px; color: #00ff88; font-size: 0.9em;">
+                © 2024 | Proyecto Académico - Blockchain Technology
+            </p>
+        </section>
+    </div>
+
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Add animation to elements when they come into view
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all sections for animation
+        document.querySelectorAll('.section, .hero').forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(30px)';
+            section.style.transition = 'all 0.6s ease';
+            observer.observe(section);
+        });
+
+        // Add hover effect to cards
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Interactive blockchain animation for hero section
+        function createBlockchainAnimation() {
+            const hero = document.querySelector('.hero');
+            const blocks = [];
+            
+            for (let i = 0; i < 5; i++) {
+                const block = document.createElement('div');
+                block.style.cssText = `
+                    position: absolute;
+                    width: 30px;
+                    height: 30px;
+                    background: linear-gradient(135deg, #00ff88, #00cc6a);
+                    border: 2px solid #ffffff;
+                    border-radius: 4px;
+                    opacity: 0.7;
+                    pointer-events: none;
+                    z-index: 1;
+                `;
+                hero.appendChild(block);
+                blocks.push(block);
+            }
+            
+            function animateBlocks() {
+                blocks.forEach((block, index) => {
+                    const x = Math.sin(Date.now() * 0.001 + index) * 100;
+                    const y = Math.cos(Date.now() * 0.001 + index) * 50;
+                    block.style.transform = `translate(${x + hero.offsetWidth/2}px, ${y + hero.offsetHeight/2}px) rotate(${Date.now() * 0.1 + index * 45}deg)`;
+                });
+                requestAnimationFrame(animateBlocks);
+            }
+            
+            animateBlocks();
+        }
+        
+        // Start blockchain animation
+        createBlockchainAnimation();
+    </script>
+</body>
+</html>
